@@ -110,6 +110,7 @@ def welcome_message(id, text):
 
 def checkReminder():
     listTasks = firebase.checkReminder()
+    print("Checking task from database: ", listTasks)
     for item in listTasks:
         content = "Bạn cần " + item[1]['name'] + " vào lúc " + str(item[1]['hour']) + " giờ " + str(item[1]['minute']) + " phút."
         uid = item[1]['id']
