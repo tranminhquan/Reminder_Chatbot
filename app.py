@@ -19,7 +19,7 @@ users=[]
 @app.route("/", methods=['GET', 'POST'])
 
 # def job():
-	
+    
 
 # thread = Thread(target=job)
 # thread.start()
@@ -43,11 +43,13 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 text_message = message['message'].get('text')
                 if text_message:
-                	if (checkOnGoingUser(recipient_id)):
-                		response_sent_text = register_message(recipient_id, text_message)
-                	else:
-                		response_sent_text = welcome_message(recipient_id, text_message)
-                	send_message(recipient_id, response_sent_text)
+                    if (checkOnGoingUser(recipient_id)):
+                        response_sent_text = register_message(recipient_id, text_message)
+                    elif text_message.find("HELP") >= 0 or text_message.find("help") >= 0 or isInterger(text_message):
+                        response_sent_text = help_message(recipient_id, text_message)
+                    else:
+                        response_sent_text = welcome_message(recipient_id, text_message)
+                    send_message(recipient_id, response_sent_text)
                     
                     
                 #if user sends us a GIF, photo,video, or any other non-text item
@@ -72,42 +74,79 @@ def get_message():
     return random.choice(sample_responses)
 
 def checkOnGoingUser(id):
-	for uid in users:
-		if uid == id:
-			return True
-	return False
+    for uid in users:
+        if uid == id:
+            return True
+    return False
+
+def isInterger(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 def register_message(id, name):
-	firebase.registerUser(id, name)
-	users.remove(id)
-	return "Chào " + name + ". Từ bây giờ mình sẽ hỗ trợ nhắc nhở công việc cho bạn\
-	Cú pháp rất đơn giản, khi cần nhắn nhở bạn chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
-	Vd: NHACNHO Làm bài tập 12/05 20:00."
+    firebase.registerUser(id, name)
+    users.remove(id)
+    return "Chào " + name + ". Từ bây giờ mình sẽ hỗ trợ nhắc nhở công việc cho bạn\
+    Cú pháp rất đơn giản, khi cần nhắn nhở bạn chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
+    Vd: NHACNHO Làm bài tập 12/05 20:00."
 
 def welcome_message(id, text):
-	user = firebase.checkExistUser(id)
-	if user==False:
-		users.append(id)
-		print("add new user to ongoing user")
-		return "Chào bạn, mình là chatbot hỗ trợ nhắc nhở công việc, tên bạn là gì?"
-	else:
-		# Check the prefix
-		if text.find("NHACNHO") >= 0:
-			infos = text.split()
-			time = infos[-1].split(':')
-			hour = int(time[0])
-			minute = int(time[1])
-			date = infos[-2].split('/')
-			day = int(date[0])
-			month = int(date[1])
-			name = ' '.join(infos[1:-2])
+    user = firebase.checkExistUser(id)
+    if user==False:
+        users.append(id)
+        print("add new user to ongoing user")
+        return "Chào bạn, mình là chatbot hỗ trợ nhắc nhở công việc, tên bạn là gì?"
+    else:
+        # Check the prefix
+        if text.find("NHACNHO") >= 0 or text.find("nhacnho") >= 0:
+            infos = text.split()
+            time = infos[-1].split(':')
+            hour = int(time[0])
+            minute = int(time[1])
+            date = infos[-2].split('/')
+            day = int(date[0])
+            month = int(date[1])
+            name = ' '.join(infos[1:-2])
+            if validTask(name, hour, minute, day, month):
+                firebase.createTask(id, name, day, month, hour, minute)
+                print("create task: ", str(name), str(hour), str(minute), str(day), str(month))
+                return "Đã xác nhận. Bạn sẽ được nhắc nhở " + str(name) + " vào lúc " + str(hour) + " giờ " + str(minute) + " phút\
+                 ngày " + str(day) + " tháng " + str(month) + "."
+            else:
+                return "Ngày hoặc khung giờ chưa hợp lý. Bạn kiểm tra lại nhé"
+        else:
+            return "Chào " + user + ". Bạn cần nhắc nhở việc gì chăng? Nếu cần giúp đỡ bạn gõ 'HELP' nhé."
 
-			firebase.createTask(id, name, day, month, hour, minute)
-			print("create task: ", str(name), str(hour), str(minute), str(day), str(month))
-			return "Đã xác nhận. Bạn sẽ được nhắc nhở " + str(name) + " vào lúc " + str(hour) + " giờ " + str(minute) + " phút\
-			 ngày " + str(day) + " tháng " + str(month) + "."
-		else:
-			return "Chào " + user + ". Bạn cần nhắc nhở việc gì chăng?"
+def help_message(id, text):
+    if isInterger(text):
+        num = int(text)
+        if num == 1:
+            return "Khi cần nhắn nhở bạn chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
+                    Vd: NHACNHO Làm bài tập 12/05 20:00."
+        if num == 2:
+            return "Mình là chatbot được phát triển để hỗ trợ nhắc nhở những việc hằng ngày"
+        if num == 3:
+            return "Trần Minh Quân, sinh viên tại trường ĐH Công nghệ Thông tin - ĐHQG TP.HCM. Thông tin liên hệ:\n \
+                    Email: tranminhquan1201@gmail.com\n Website: https://quantranminh.000webhostapp.com/"
+        else:
+            return "Danh mục nằm ngoài danh mục giúp đỡ rồi, kiểm tra lại nhé"
+    else:
+        return "Mình có thế giúp gì cho bạn?\n \
+        1.Làm sao để đặt nhắc nhở?\n \
+        2.Mục đích của mày đến Trái Đất để làm gì\n \
+        3.Ai là người tạo ra mày?"
+
+def validTask(name, hour, minute, day, month):
+    now = datetime.datetime.now()
+    try:
+        date = datetime.date(now.year, month, day)
+        time = datetime.time(hour, minute)
+        return True
+    except ValueError:
+        return False
 
 def checkReminder():
     now = datetime.datetime.now()
