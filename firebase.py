@@ -74,7 +74,6 @@ def checkReminder():
 
 init()
 
-
 # registerUser('123456', 'Nguyen Van A')
 # registerUser('2313156', 'Bui Thi B')
 # registerUser('1623325', ' TM DC')

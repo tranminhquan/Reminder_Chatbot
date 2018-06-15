@@ -5,6 +5,7 @@ from pymessenger.bot import Bot
 from threading import Thread
 import schedule
 import os
+import datetime
 
 
 app = Flask(__name__)
@@ -109,8 +110,9 @@ def welcome_message(id, text):
 			return "Chào " + user + ". Bạn cần nhắc nhở việc gì chăng?"
 
 def checkReminder():
+    now = datetime.datetime.now()
     listTasks = firebase.checkReminder()
-    print("Checking task from database: ", listTasks)
+    print("[", now, "] ", "Checking task from database: ", listTasks)
     for item in listTasks:
         content = "Bạn cần " + item[1]['name'] + " vào lúc " + str(item[1]['hour']) + " giờ " + str(item[1]['minute']) + " phút."
         uid = item[1]['id']
