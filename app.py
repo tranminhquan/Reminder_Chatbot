@@ -90,7 +90,7 @@ def register_message(id, name):
     firebase.registerUser(id, name)
     users.remove(id)
     return "Chào " + name + ". Từ bây giờ mình sẽ hỗ trợ nhắc nhở công việc cho bạn\
-    Cú pháp rất đơn giản, khi cần nhắn nhở bạn chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
+    Cú pháp rất đơn giản, khi cần nhắc nhở chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
     Vd: NHACNHO Làm bài tập 12/05 20:00."
 
 def welcome_message(id, text):
@@ -124,13 +124,14 @@ def help_message(id, text):
     if isInterger(text):
         num = int(text)
         if num == 1:
-            return "Khi cần nhắn nhở bạn chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
-                    Vd: NHACNHO Làm bài tập 12/05 20:00."
+            return "Khi cần nhắc nhở chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
+            Vd: NHACNHO Làm bài tập 12/05 20:00."
         if num == 2:
-            return "Chatbot này được phát triển để hỗ trợ nhắc nhở những việc hằng ngày. Phiên bản hiện tại: thử nghiệm"
+            return "Chatbot này được phát triển để hỗ trợ nhắc nhở những việc hằng ngày. Được viết trên python\
+            Phiên bản hiện tại: thử nghiệm"
         if num == 3:
-            return "Trần Minh Quân, sinh viên tại trường ĐH Công nghệ Thông tin - ĐHQG TP.HCM. Thông tin liên hệ:\n \
-                    Email: tranminhquan1201@gmail.com\n Website: https://quantranminh.000webhostapp.com/"
+            return "Được phát triển bởi Trần Minh Quân, sinh viên tại trường ĐH Công nghệ Thông tin - ĐHQG TP.HCM. Thông tin liên hệ:\n \
+            Email: tranminhquan1201@gmail.com\n Website: https://quantranminh.000webhostapp.com/"
         else:
             return "Danh mục nằm ngoài danh mục giúp đỡ rồi, kiểm tra lại nhé"
     else:
