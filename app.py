@@ -127,7 +127,7 @@ def help_message(id, text):
             return "Khi cần nhắn nhở bạn chỉ cần bạn nhắn NHACNHO <Ten viec> <Ngay> <Gio:Phut>\
                     Vd: NHACNHO Làm bài tập 12/05 20:00."
         if num == 2:
-            return "Mình là chatbot được phát triển để hỗ trợ nhắc nhở những việc hằng ngày"
+            return "Chatbot này được phát triển để hỗ trợ nhắc nhở những việc hằng ngày. Phiên bản hiện tại: thử nghiệm"
         if num == 3:
             return "Trần Minh Quân, sinh viên tại trường ĐH Công nghệ Thông tin - ĐHQG TP.HCM. Thông tin liên hệ:\n \
                     Email: tranminhquan1201@gmail.com\n Website: https://quantranminh.000webhostapp.com/"
