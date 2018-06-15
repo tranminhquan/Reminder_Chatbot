@@ -6,12 +6,14 @@ from threading import Thread
 import schedule
 import os
 import datetime
+import requests
 
 
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
 ACCESS_TOKEN = 'EAAasT87RGaoBAMwZAkZBZAWJhLZAGaTCeWqfYa2zaPMiCJmir0GHLSk7EXnZCOwabS7v3r5CM2ryaAe71u99ZBo8U6aAR5WIYOZBHZCYUcVtQisoZBflCgSwMy8UZCAL0ZA0lPXgp3VZA1wMzws5aBsAs9NC0IU8738NqesZCmTmJer2IfA8HZByAApZApt'
 VERIFY_TOKEN = 'PYTHON_CHATBOT_MQ'
+SERVER_URL = 'https://reminder-tmq-chatbot.herokuapp.com/'
 bot = Bot(ACCESS_TOKEN)
 
 users=[]
@@ -158,8 +160,13 @@ def checkReminder():
         uid = item[1]['id']
         send_message(uid, content)
 
+def requestServer():
+    print("----------auto ping server----------")
+    requests.get(SERVER_URL)
+
 def setSchedule():
     schedule.every(1).minutes.do(checkReminder)
+    schedule.every(10).minutes.do(requestServer)
     while True:
         schedule.run_pending()
 
