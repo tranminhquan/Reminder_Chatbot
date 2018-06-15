@@ -4,8 +4,11 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 from threading import Thread
 import schedule
+import os
+
 
 app = Flask(__name__)
+port = int(os.environ.get('PORT', 5000))
 ACCESS_TOKEN = 'EAAasT87RGaoBAMwZAkZBZAWJhLZAGaTCeWqfYa2zaPMiCJmir0GHLSk7EXnZCOwabS7v3r5CM2ryaAe71u99ZBo8U6aAR5WIYOZBHZCYUcVtQisoZBflCgSwMy8UZCAL0ZA0lPXgp3VZA1wMzws5aBsAs9NC0IU8738NqesZCmTmJer2IfA8HZByAApZApt'
 VERIFY_TOKEN = 'PYTHON_CHATBOT_MQ'
 bot = Bot(ACCESS_TOKEN)
@@ -127,4 +130,4 @@ if __name__ == "__main__":
     checkingThread = Thread(target=setSchedule)
     checkingThread.daemon = True
     checkingThread.start()
-    app.run()
+    app.run(host='0.0.0.0', port=port)
