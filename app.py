@@ -47,7 +47,7 @@ def receive_message():
                 if text_message:
                     if (checkOnGoingUser(recipient_id)):
                         response_sent_text = register_message(recipient_id, text_message)
-                    elif text_message.find("HELP") >= 0 or text_message.find("help") >= 0 or isInterger(text_message):
+                    elif text_message.lower().find("help") >= 0 or isInterger(text_message):
                         response_sent_text = help_message(recipient_id, text_message)
                     else:
                         response_sent_text = welcome_message(recipient_id, text_message)
@@ -103,7 +103,7 @@ def welcome_message(id, text):
         return "Chào bạn, mình là chatbot hỗ trợ nhắc nhở công việc, tên bạn là gì?"
     else:
         # Check the prefix
-        if text.find("NHACNHO") >= 0 or text.find("nhacnho") >= 0:
+        if text.lower().find("nhacnho") >= 0:
             infos = text.split()
             time = infos[-1].split(':')
             hour = int(time[0])
