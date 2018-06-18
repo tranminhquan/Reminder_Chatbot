@@ -45,6 +45,26 @@ def getAllUser():
 	# 	print(item[0])
 	return snapshot
 
+def getAllTask():
+	snapshot = db.reference('/tasks').order_by_key().get()
+	return snapshot
+
+def getAllTaskInDay(day, month):
+	listTasks = []
+	snapshot = getAllTask()
+	for task_of_user in snapshot.items():
+		uid = task_of_user[0]
+		dict_tasks = {}
+		dict_tasks['id'] = uid
+		tasks = db.reference('/tasks').child(uid).order_by_child('day').equal_to(day).get()
+		list_tasks_of_user = []
+		for task in tasks.items():
+			if task[1]['month'] == month:
+				list_tasks_of_user.append(task[1])
+		dict_tasks['tasks'] = list_tasks_of_user
+		listTasks.append(dict_tasks)
+	return listTasks
+
 def checkExistUser(id):
 	listUsers = getAllUser()
 	for user in listUsers.items():
@@ -73,7 +93,16 @@ def checkReminder():
 	return listTasks
 
 init()
+# ls = getAllTaskInDay(19, 6)
+# for item in ls:
+# 	msg = 'Chúc bạn ngày mới tốt lành. Hôm nay bạn có những việc cần thực hiện như sau:\n'
+# 	uid = item['id']
+# 	for task in item['tasks']:
+# 		msg += task['name'] + ' vào lúc ' + str(task['hour']) + ' giờ ' + str(task['minute']) + ' phút\n'
+# 	print(msg)
 
+# for item in ls.items():
+# 	print(item[1])
 # registerUser('123456', 'Nguyen Van A')
 # registerUser('2313156', 'Bui Thi B')
 # registerUser('1623325', ' TM DC')

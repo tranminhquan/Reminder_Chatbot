@@ -160,6 +160,19 @@ def checkReminder():
         uid = item[1]['id']
         send_message(uid, content)
 
+    # Good morning message
+    if now.hour == 6:
+        print('send good morning message')
+        ls = firebase.getAllTaskInDay(now.day, now.month)
+        for item in ls:
+            msg = 'Chào buổi sáng!\nChúc bạn ngày mới tốt lành. Hôm nay bạn có những việc cần thực hiện như sau:\n'
+            uid = item['id']
+            for task in item['tasks']:
+                msg += task['name'] + ' vào lúc ' + str(task['hour']) + ' giờ ' + str(task['minute']) + ' phút\n'
+            # send to user
+            send_message(uid, msg)
+
+
 def requestServer():
     print("----------auto ping server----------")
     requests.get(SERVER_URL)
