@@ -161,7 +161,7 @@ def checkReminder():
         send_message(uid, content)
 
     # Good morning message
-    if now.hour == 6:
+    if now.hour == 6 and now.minute == 0:
         print('send good morning message')
         ls = firebase.getAllTaskInDay(now.day, now.month)
         for item in ls:
@@ -171,6 +171,8 @@ def checkReminder():
                 msg += task['name'] + ' vào lúc ' + str(task['hour']) + ' giờ ' + str(task['minute']) + ' phút\n'
             # send to user
             send_message(uid, msg)
+            print('send message to ', uid)
+            print(msg)
 
 
 def requestServer():
