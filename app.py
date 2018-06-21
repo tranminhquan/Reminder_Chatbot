@@ -104,21 +104,24 @@ def welcome_message(id, text):
     else:
         # Check the prefix
         if text.lower().find("nhacnho") >= 0:
-            infos = text.split()
-            time = infos[-1].split(':')
-            hour = int(time[0])
-            minute = int(time[1])
-            date = infos[-2].split('/')
-            day = int(date[0])
-            month = int(date[1])
-            name = ' '.join(infos[1:-2])
-            if validTask(name, hour, minute, day, month):
-                firebase.createTask(id, name, day, month, hour, minute)
-                print("create task: ", str(name), str(hour), str(minute), str(day), str(month))
-                return "Đã xác nhận. Bạn sẽ được nhắc nhở " + str(name) + " vào lúc " + str(hour) + " giờ " + str(minute) + " phút\
-                 ngày " + str(day) + " tháng " + str(month) + "."
-            else:
-                return "Ngày hoặc khung giờ chưa hợp lý. Bạn kiểm tra lại nhé"
+            try:
+                infos = text.split()
+                time = infos[-1].split(':')
+                hour = int(time[0])
+                minute = int(time[1])
+                date = infos[-2].split('/')
+                day = int(date[0])
+                month = int(date[1])
+                name = ' '.join(infos[1:-2])
+                if validTask(name, hour, minute, day, month):
+                    firebase.createTask(id, name, day, month, hour, minute)
+                    print("create task: ", str(name), str(hour), str(minute), str(day), str(month))
+                    return "Đã xác nhận. Bạn sẽ được nhắc nhở " + str(name) + " vào lúc " + str(hour) + " giờ " + str(minute) + " phút\
+                     ngày " + str(day) + " tháng " + str(month) + "."
+                else:
+                    return "Ngày hoặc khung giờ chưa hợp lý. Bạn kiểm tra lại nhé"
+            except:
+                return "Bạn nhập chưa đúng cú pháp thì phải. Kiểm tra lại nhé"
         else:
             return "Chào " + user + ". Bạn cần nhắc nhở việc gì chăng? Nếu cần giúp đỡ bạn gõ 'HELP' nhé."
 
